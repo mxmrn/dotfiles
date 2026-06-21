@@ -85,27 +85,11 @@ esac
 echo "$wallpaper" > "$cache_file"
 echo ":: Wallpaper: $wallpaper"
 
-# Set color scheme type (default: scheme-content)
-# Usage: wallpaper.sh [command] [scheme-type]
-# Available types: content, monochrome, neutral, tonal-spot, vibrant, expressive, fidelity, fruit-salad, rainbow
-scheme_type="${2:-content}"
-
-# Map short names to full scheme names
-case "$scheme_type" in
-    mono|monochrome) scheme_type="monochrome" ;;
-    neutral) scheme_type="neutral" ;;
-    content) scheme_type="content" ;;
-    tonal|tonal-spot) scheme_type="tonal-spot" ;;
-    vibrant) scheme_type="vibrant" ;;
-    expressive) scheme_type="expressive" ;;
-    fidelity) scheme_type="fidelity" ;;
-    fruit-salad) scheme_type="fruit-salad" ;;
-    rainbow) scheme_type="rainbow" ;;
-    *) scheme_type="content" ;;
-esac
-
-echo ":: Using color scheme: scheme-$scheme_type"
-matugen image "$wallpaper" --type "scheme-$scheme_type"
+if [ "$1" == "scheme" ] && [ -n "$2" ]; then
+    matugen image "$wallpaper" --type "scheme-$2" --source-color-index 0
+else
+    matugen image "$wallpaper" --type "scheme-content" --source-color-index 0
+fi
 
 # ----------------------------------------------------- 
 # get wallpaper image name
@@ -225,38 +209,6 @@ if [ "$1" == "init" ] ;then
     echo ":: Init"
 else
     notify-send "Wallpaper" "Applied $newwall" -h int:value:100 -h string:x-canonical-private-synchronous:wallpaper
-fi
-
-# -----------------------------------------------------
-# Set SDDM wallpaper (async - runs in background)
-# -----------------------------------------------------
-if [ "$1" == "init" ] ;then
-    echo ":: Skipping SDDM wallpaper update on init"
-else
-    {
-        echo ":: Setting SDDM wallpaper (background)"
-
-        # Create SDDM config directory if it doesn't exist
-        if [ ! -d /etc/sddm.conf.d/ ]; then
-            sudo mkdir -p /etc/sddm.conf.d 2>/dev/null
-        fi
-
-        # Copy SDDM config
-        sudo cp "$HOME/dotfiles/config/sddm/sddm.conf" /etc/sddm.conf.d/ 2>/dev/null
-
-        # Get file extension
-        extension="${wallpaper##*.}"
-
-        # Copy current wallpaper to SDDM theme
-        sudo cp "$wallpaper" /usr/share/sddm/themes/silent/Backgrounds/current_wallpaper.$extension 2>/dev/null
-
-        # Update theme.conf
-        sudo cp "$HOME/dotfiles/config/sddm/theme.conf" /usr/share/sddm/themes/silent/ 2>/dev/null
-        sudo sed -i 's/CURRENTWALLPAPER/'"current_wallpaper.$extension"'/' /usr/share/sddm/themes/silent/theme.conf 2>/dev/null
-
-        echo ":: SDDM wallpaper updated"
-    } &
-    disown
 fi
 
 echo "DONE!"

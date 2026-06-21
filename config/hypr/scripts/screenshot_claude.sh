@@ -20,13 +20,8 @@ kitty @ --to "$SOCKET" send-text --match "cmdline:claude" "@${FILE}"
 
 KITTY_PID=$(lsof /tmp/kitty-claude 2>/dev/null | awk 'NR>1 {print $2; exit}')
 CLAUDE_ADDR=$(hyprctl clients -j | jq -r --argjson pid "$KITTY_PID" '.[] | select(.pid == $pid) | .address')
-PREV=$(hyprctl activewindow -j | jq -r '.address')
 
-hyprctl dispatch focuswindow "address:$CLAUDE_ADDR"
-# sleep 0.1
-wtype -k Return
+hyprctl dispatch sendshortcut ", Return, address:$CLAUDE_ADDR"
 sleep 0.1
-wtype -k Return
-
-hyprctl dispatch focuswindow "address:$PREV"
+hyprctl dispatch sendshortcut ", Return, address:$CLAUDE_ADDR"
 
