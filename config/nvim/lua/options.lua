@@ -69,6 +69,9 @@ opt.ttyfast = true
 -- Mouse
 opt.mouse = "a"
 
+-- Clipboard
+opt.clipboard = "unnamedplus"
+
 -- Signcolumn
 o.signcolumn = "yes"      -- always show signcolumn
 

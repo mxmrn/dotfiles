@@ -3,14 +3,14 @@ local autocmd = vim.api.nvim_create_autocmd
 -- auto save on focus lost
 autocmd("FocusLost", {
   pattern = "*",
-  command = "silent! wa",
+  command = "silent! noautocmd wa",
 })
 
 -- highlight on yank
 autocmd("TextYankPost", {
   pattern = "*",
   callback = function()
-    vim.highlight.on_yank {
+    vim.hl.on_yank {
       higroup = "IncSearch",
       timeout = 200,
     }

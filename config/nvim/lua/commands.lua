@@ -2,27 +2,7 @@
 
 -- MasonInstallAll command
 vim.api.nvim_create_user_command("MasonInstallAll", function()
-  -- Get ensure_installed list from lazy.nvim config
-  local ensure_installed = {
-    "gopls",
-    "prettier",
-    "debugpy",
-    "ruff",
-    "pyright",
-    "html-lsp",
-    "css-lsp",
-    "typescript-language-server",
-    "json-lsp",
-    "lua-language-server",
-    "rust-analyzer",
-    "nomicfoundation-solidity-language-server",
-    "stylua",
-    "gofumpt",
-    "goimports-reviser",
-    "golines",
-    "black",
-    "sqls",
-  }
+  local ensure_installed = require "configs.mason_tools"
 
   vim.cmd "Mason"
 

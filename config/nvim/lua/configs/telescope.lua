@@ -15,14 +15,23 @@ return {
     mappings = {
       n = { ["q"] = require("telescope.actions").close },
     },
-    file_ignore_patterns = {},
+    file_ignore_patterns = { "^%.git/", "node_modules/", "^target/", "%.venv/", "__pycache__/" },
   },
   pickers = {
     find_files = {
       hidden = true,
-      no_ignore = true,
     },
   },
   extensions_list = { "themes", "terms" },
-  extensions = {},
+  extensions = {
+    ["ui-select"] = require("telescope.themes").get_dropdown(),
+    undo = {
+      use_delta = true,
+      side_by_side = true,
+      layout_strategy = "vertical",
+      layout_config = {
+        preview_height = 0.8,
+      },
+    },
+  },
 }

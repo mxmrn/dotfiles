@@ -18,6 +18,7 @@ return {
         timeout = 3000,
       },
       quickfile = { enabled = true },
+      input = { enabled = true },
       statuscolumn = { enabled = false },
       words = { enabled = true },
       styles = {
@@ -86,75 +87,71 @@ return {
     enabled = false,
   },
   {
+    "mfussenegger/nvim-lint",
+    event = { "BufReadPost", "BufNewFile", "BufWritePost" },
+    config = function()
+      local lint = require "lint"
+      lint.linters_by_ft = {
+        go = { "golangcilint" },
+        sh = { "shellcheck" },
+        bash = { "shellcheck" },
+        javascript = { "eslint_d" },
+        javascriptreact = { "eslint_d" },
+        typescript = { "eslint_d" },
+        typescriptreact = { "eslint_d" },
+      }
+
+      local eslint_configs = {
+        "eslint.config.js", "eslint.config.mjs", "eslint.config.cjs", "eslint.config.ts",
+        ".eslintrc", ".eslintrc.js", ".eslintrc.cjs", ".eslintrc.json", ".eslintrc.yml", ".eslintrc.yaml",
+      }
+
+      local function run_lint(buf)
+        if vim.b[buf].large_file then
+          return
+        end
+        local names = lint._resolve_linter_by_ft(vim.bo[buf].filetype)
+        names = vim.tbl_filter(function(name)
+          -- eslint_d fails noisily without a project config
+          if name == "eslint_d" then
+            return #vim.fs.find(eslint_configs, { path = vim.api.nvim_buf_get_name(buf), upward = true, limit = 1 }) > 0
+          end
+          return true
+        end, names)
+        if #names > 0 then
+          lint.try_lint(names)
+        end
+      end
+
+      vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
+        group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
+        callback = function(args)
+          run_lint(args.buf)
+        end,
+      })
+    end,
+  },
+  {
     "stevearc/conform.nvim",
     event = "BufWritePre", -- uncomment for format on save
     opts = require "configs.conform",
   },
 
   {
-    "nvim-neotest/nvim-nio",
-  },
-  {
-    "mfussenegger/nvim-dap",
-  },
-  {
-    "dreamsofcode-io/nvim-dap-go",
-    ft = "go",
-    dependencies = "mfussenegger/nvim-dap",
-    config = function(_, opts)
-      require("dap-go").setup(opts)
-    end,
-  },
-  {
-    "mfussenegger/nvim-dap-python",
-    ft = "python",
-    dependencies = {
-      "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio",
-    },
-    config = function(_, opts)
-      local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
-      require("dap-python").setup(path)
-    end,
-  },
-  {
-    "rcarriga/nvim-dap-ui",
-    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
-    keys = {
-      {
-        "<leader>du",
-        function()
-          require("dapui").toggle()
-        end,
-        desc = "Toggle DAP UI",
-      },
-    },
-    config = function()
-      require("dapui").setup()
-    end,
-  },
-  {
     "williamboman/mason.nvim",
-    cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUpdate" },
+    -- must load at startup: mason.setup() prepends its bin dir to PATH,
+    -- otherwise LSP cmds like "gopls" are not found
+    lazy = false,
+    priority = 100,
     build = ":MasonUpdate",
+    opts = {},
+  },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = "williamboman/mason.nvim",
+    event = "VeryLazy",
     opts = {
-      ensure_installed = {
-        "gopls",
-        "prettier",
-        "debugpy",
-        "ruff",
-        "pyright",
-        "html-lsp",
-        "css-lsp",
-        "typescript-language-server",
-        "json-lsp",
-        "stylua",
-        "gofumpt",
-        "goimports-reviser",
-        "golines",
-        "black",
-        "sqls",
-      },
+      ensure_installed = require "configs.mason_tools",
     },
   },
   {
@@ -175,14 +172,11 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
-    init = function()
-      vim.opt.runtimepath:append(vim.fn.stdpath "config" .. "/after")
-    end,
-    opts = function()
-      return require "configs.treesitter"
+    config = function()
+      require("configs.treesitter").setup()
     end,
   },
   {
@@ -212,13 +206,6 @@ return {
     build = function()
       vim.cmd [[silent! GoInstallDeps]]
     end,
-  },
-  {
-    "mbbill/undotree",
-    cmd = "UndotreeToggle",
-    keys = {
-      { "<leader>ut", "<cmd>UndotreeToggle<cr>", desc = "Toggle Undotree" },
-    },
   },
   {
     "folke/noice.nvim",
@@ -260,7 +247,7 @@ return {
     },
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
+      "folke/snacks.nvim",
     },
   },
   {
@@ -310,20 +297,8 @@ return {
         desc = "Undo history",
       },
     },
-    opts = {
-      extensions = {
-        undo = {
-          use_delta = true,
-          side_by_side = true,
-          layout_strategy = "vertical",
-          layout_config = {
-            preview_height = 0.8,
-          },
-        },
-      },
-    },
-    config = function(_, opts)
-      require("telescope").setup(opts)
+    config = function()
+      -- extension options live in configs/telescope.lua
       require("telescope").load_extension "undo"
     end,
   },
@@ -402,23 +377,28 @@ return {
   },
   {
     "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("harpoon"):setup()
+    end,
     keys = {
       {
         "<leader>Ha",
         function()
-          require("harpoon.mark").add_file()
+          require("harpoon"):list():add()
         end,
         desc = "Harpoon: Mark File",
       },
       {
         "<C-e>",
         function()
-          require("harpoon.ui").toggle_quick_menu()
+          local harpoon = require "harpoon"
+          harpoon.ui:toggle_quick_menu(harpoon:list())
         end,
         desc = "Toggle Harpoon Menu",
       },
     },
-    dependencies = { "nvim-lua/plenary.nvim" },
   },
   {
     "coder/claudecode.nvim",
@@ -471,7 +451,6 @@ return {
     lazy = false,
     dependencies = "rafamadriz/friendly-snippets",
     version = "*",
-    build = "cargo build --release",
     opts = {
       keymap = {
         preset = "default",
@@ -642,56 +621,25 @@ return {
     },
   },
   {
-    "stevearc/dressing.nvim",
+    "nvim-telescope/telescope-ui-select.nvim",
+    dependencies = "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
-    opts = {
-      input = {
-        enabled = true,
-        default_prompt = "Input:",
-        border = "rounded",
-      },
-      select = {
-        enabled = true,
-        backend = { "telescope", "builtin" },
-      },
-    },
+    config = function()
+      require("telescope").load_extension "ui-select"
+    end,
   },
   {
     "lukas-reineke/indent-blankline.nvim",
     event = { "BufReadPost", "BufNewFile" },
     main = "ibl",
     config = function()
-      local function set_ibl_colors()
-        -- get primary color from current colorscheme
-        local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
-        local bg = normal.bg or 0x000000
-
-        -- use different colors based on background brightness
-        local is_light = vim.o.background == "light"
-        local scope_color = is_light and "#3b8eea" or "#61afef"
-
-        vim.api.nvim_set_hl(0, "IblScope", { fg = scope_color })
-      end
-
-      -- set colors initially
-      set_ibl_colors()
-
-      -- update colors when colorscheme changes
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        callback = set_ibl_colors,
-      })
-
+      -- scope line is drawn by mini.indentscope
       require("ibl").setup {
         indent = {
           char = "│",
           tab_char = "│",
         },
-        scope = {
-          enabled = true,
-          show_start = true,
-          show_end = false,
-          highlight = "IblScope",
-        },
+        scope = { enabled = false },
         exclude = {
           filetypes = {
             "help",
@@ -850,6 +798,23 @@ return {
         },
       },
     },
+  },
+  {
+    "echasnovski/mini.animate",
+    event = "VeryLazy",
+    config = function()
+      local animate = require("mini.animate")
+      animate.setup({
+        cursor = {
+          enable = true,
+          timing = animate.gen_timing.linear({ duration = 150, unit = "total" }),
+        },
+        scroll = { enable = false },
+        resize = { enable = false },
+        open = { enable = false },
+        close = { enable = false },
+      })
+    end,
   },
   {
     "echasnovski/mini.bufremove",

@@ -17,8 +17,6 @@ require("lazy").setup({
   { import = "plugins" },
 }, lazy_config)
 
-vim.opt.clipboard = "unnamedplus"
-
 require "options"
 require "autocmds"
 require "commands"

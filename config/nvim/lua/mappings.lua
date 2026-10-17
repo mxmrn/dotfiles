@@ -26,7 +26,7 @@ map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
 -- General
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "clear highlights" })
 map("n", "<C-s>", "<cmd>w<CR>", { desc = "save file" })
-map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "copy whole file" })
+map("n", "<leader>ya", "<cmd>%y+<CR>", { desc = "copy whole file" })
 map("n", ";", ":", { desc = "CMD enter command mode" })
 
 -- UI toggles
@@ -57,12 +57,14 @@ map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>", { desc = "git commits" 
 map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", { desc = "git status" })
 map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "find files" })
 map("n", "<leader>fk", "<cmd>Telescope keymaps<cr>", { desc = "find keymaps" })
-map(
-  "n",
-  "<leader>fa",
-  "<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
-  { desc = "find all files" }
-)
+map("n", "<leader>fa", function()
+  require("telescope.builtin").find_files {
+    follow = true,
+    no_ignore = true,
+    hidden = true,
+    file_ignore_patterns = {},
+  }
+end, { desc = "find all files" })
 
 -- Git (gitsigns - applied on BufEnter for git files)
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
@@ -155,8 +157,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     -- Diagnostics
     lsp_map("n", "gl", vim.diagnostic.open_float, "Show line diagnostics")
-    lsp_map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-    lsp_map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
+    lsp_map("n", "[d", function()
+      vim.diagnostic.jump { count = -1, float = true }
+    end, "Previous diagnostic")
+    lsp_map("n", "]d", function()
+      vim.diagnostic.jump { count = 1, float = true }
+    end, "Next diagnostic")
   end,
 })
 
@@ -168,27 +174,6 @@ map("n", "zM", function()
   require("ufo").closeAllFolds()
 end, { desc = "Close all folds" })
 
--- Debug
-map("n", "<leader>dgt", function()
-  require("dap-go").debug_test()
-end, { desc = "Debug go test" })
-
-map("n", "<leader>dgl", function()
-  require("dap-go").debug_last()
-end, { desc = "Debug last go test" })
-
-map("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", { desc = "Add breakpoint at line" })
-map("n", "<leader>dus", function()
-  local widgets = require "dap.ui.widgets"
-  local sidebar = widgets.sidebar(widgets.scopes)
-  sidebar.open()
-end, { desc = "Open debugging sidebar" })
-
-map("n", "<leader>dn", "<cmd>DapStepOver<CR>", { desc = "DAP Next step" })
-map("n", "<leader>dc", function()
-  require("dap").continue()
-end, { desc = "Debug" })
-
 map("n", "n", "nzzzv", { desc = "centered move to the next find" })
 map("n", "N", "Nzzzv", { desc = "centered move to the next find" })
 
@@ -196,7 +181,7 @@ map(
   "n",
   "<leader>s",
   ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
-  { desc = "centered move to the next find" }
+  { desc = "replace word under cursor" }
 )
 
 map("n", "<leader>ld", "<cmd>Telescope diagnostics<CR>", { desc = "LSP diagnostic loclist" })

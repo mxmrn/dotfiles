@@ -4,29 +4,29 @@ local base16 = require('mini.base16')
 local shared = require('colors._shared')
 
 local diff_palette = {
-  add    = { bg = '#919870', fg = '#000000' },
+  add    = { bg = '#c66dda', fg = '#000000' },
   delete = { bg = '#93000a',    fg = '#ffdad6' },
-  change = { bg = '#ad8f68' },
-  text   = { bg = '#514535' },
+  change = { bg = '#4d8efe' },
+  text   = { bg = '#344972' },
 }
 
 -- Base16 palette from matugen
 local palette = {
-  base00 = '#151310', -- background
-  base01 = '#151310', -- lighter background
-  base02 = '#151310', -- selection
-  base03 = '#4e453c', -- comments, line numbers
-  base04 = '#d1c4b8', -- dark foreground
-  base05 = '#e8e1dc', -- foreground
-  base06 = '#f2eeeb', -- light foreground
-  base07 = '#fcfbfb', -- lightest
+  base00 = '#11131a', -- background
+  base01 = '#11131a', -- lighter background
+  base02 = '#11131a', -- selection
+  base03 = '#424753', -- comments, line numbers
+  base04 = '#c2c6d5', -- dark foreground
+  base05 = '#e1e2eb', -- foreground
+  base06 = '#f0f1f5', -- light foreground
+  base07 = '#ffffff', -- lightest
   base08 = '#ffb4ab', -- red (variables, errors)
-  base09 = '#c5ab8d', -- orange
-  base0A = '#d6c4af', -- yellow
-  base0B = '#c3cb9f', -- green (strings)
-  base0C = '#ffddb3', -- cyan (operators)
-  base0D = '#e3c197', -- blue (functions)
-  base0E = '#e0e7ba', -- purple (keywords)
+  base09 = '#83a4f2', -- orange
+  base0A = '#b1c6f7', -- yellow
+  base0B = '#f4aeff', -- green (strings)
+  base0C = '#d8e2ff', -- cyan (operators)
+  base0D = '#adc6ff', -- blue (functions)
+  base0E = '#fdd6ff', -- purple (keywords)
   base0F = '#ffcbc5', -- brown
 }
 
@@ -43,21 +43,21 @@ vim.g.colors_name = 'matugen'
 
 -- Custom highlight colors
 local colors = {
-  white = '#e8e1dc',
-  darker_black = '#221f1c',
-  black = '#141210',
-  black2 = '#151310',
-  one_bg = '#151310',
-  grey = '#4e453c',
+  white = '#e1e2eb',
+  darker_black = '#1d2026',
+  black = '#111319',
+  black2 = '#11131a',
+  one_bg = '#11131a',
+  grey = '#424753',
   red = '#ffb4ab',
-  pink = '#e0e7ba',
-  green = '#c3cb9f',
-  blue = '#e3c197',
-  orange = '#c5ab8d',
-  cyan = '#ffe8cd',
-  teal = '#ffddb3',
-  purple = '#d8e0a7',
-  lavender = '#fff4e6',
+  pink = '#fdd6ff',
+  green = '#f4aeff',
+  blue = '#adc6ff',
+  orange = '#83a4f2',
+  cyan = '#f2f5ff',
+  teal = '#d8e2ff',
+  purple = '#fcbdff',
+  lavender = '#ffffff',
 }
 
 local function apply_custom_highlights()

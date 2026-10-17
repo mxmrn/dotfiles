@@ -24,7 +24,7 @@ capabilities.textDocument.foldingRange = {
 }
 
 local function on_init(client, _)
-  if client.supports_method "textDocument/semanticTokens" then
+  if client:supports_method "textDocument/semanticTokens/full" then
     client.server_capabilities.semanticTokensProvider = nil
   end
 end
@@ -56,7 +56,9 @@ local function make_config(cmd, filetypes, root_markers, settings)
       if scheme and scheme ~= "file" then
         return
       end
-      local found = vim.fs.root(bufnr, root_markers)
+      -- fall back to the file's own dir so single-file projects
+      -- (no go.mod / no .git) still get a server
+      local found = vim.fs.root(bufnr, root_markers) or vim.fs.dirname(bufname)
       if found then
         on_dir(found)
       end
@@ -141,22 +143,22 @@ vim.lsp.config.ts_ls = make_config(
   {
     typescript = {
       inlayHints = {
-        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHints = "literals",
         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-        includeInlayFunctionParameterTypeHints = true,
-        includeInlayVariableTypeHints = true,
-        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionParameterTypeHints = false,
+        includeInlayVariableTypeHints = false,
+        includeInlayPropertyDeclarationTypeHints = false,
         includeInlayFunctionLikeReturnTypeHints = true,
         includeInlayEnumMemberValueHints = true,
       },
     },
     javascript = {
       inlayHints = {
-        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHints = "literals",
         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-        includeInlayFunctionParameterTypeHints = true,
-        includeInlayVariableTypeHints = true,
-        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionParameterTypeHints = false,
+        includeInlayVariableTypeHints = false,
+        includeInlayPropertyDeclarationTypeHints = false,
         includeInlayFunctionLikeReturnTypeHints = true,
         includeInlayEnumMemberValueHints = true,
       },
