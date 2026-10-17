@@ -50,7 +50,7 @@ dotfiles/
 │   ├── waybar-crypto/   # Crypto prices module for waybar
 │   ├── swaync/          # Notification center
 │   ├── wlogout/         # Logout menu
-│   ├── swappy/          # Screenshot editor
+│   ├── satty/           # Screenshot editor
 │   ├── starship/        # Shell prompt
 │   ├── matugen/         # Color scheme generator
 │   ├── fastfetch/       # System info tool
