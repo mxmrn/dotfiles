@@ -7,7 +7,7 @@ configuration {
     modi: "drun,run";
     font: "Fira Sans 12";
     show-icons: true;
-    icon-theme: "kora";
+    icon-theme: "Papirus";
     display-drun: "APPS";
     display-run: "RUN";
     display-filebrowser: "FILES";
