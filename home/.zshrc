@@ -81,7 +81,7 @@ zstyle ':completion:*' cache-path "${HOME}/.zsh/cache"
 DOTFILES_SHELL="${HOME}/dotfiles/home/shell"
 
 # Load modules in order (plugins last for syntax highlighting)
-for module in path wayland conda aliases plugins; do
+for module in path wayland conda aliases fzf plugins; do
     if [[ -f "${DOTFILES_SHELL}/${module}.zsh" ]]; then
         source "${DOTFILES_SHELL}/${module}.zsh"
     fi
