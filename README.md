@@ -127,7 +127,7 @@ zsh starship zsh-autosuggestions zsh-syntax-highlighting zoxide fzf
 **Optional:**
 
 ```bash
-sddm hyprlock hypridle brightnessctl playerctl cava btop fastfetch
+sddm hyprlock hypridle brightnessctl playerctl btop fastfetch
 thunar nautilus zen-browser-bin pavucontrol waybar-crypto yazi
 ```
 
