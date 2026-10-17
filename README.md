@@ -128,7 +128,7 @@ zsh starship zsh-autosuggestions zsh-syntax-highlighting zoxide fzf
 
 ```bash
 sddm hyprlock hypridle brightnessctl playerctl btop fastfetch
-thunar nautilus zen-browser-bin pavucontrol waybar-crypto yazi
+nautilus zen-browser-bin pavucontrol waybar-crypto yazi
 ```
 
 ### Installation
