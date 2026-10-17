@@ -6,8 +6,8 @@
 # Dotfiles management
 alias dotfiles='cd ${HOME}/dotfiles'
 alias dots='cd ${HOME}/dotfiles'
-alias hyprconf='cd ${HOME}/dotfiles/hypr/conf'
-alias nvimconf='cd ${HOME}/dotfiles/nvim'
+alias hyprconf='cd ${HOME}/dotfiles/config/hypr'
+alias nvimconf='cd ${HOME}/dotfiles/config/nvim'
 
 # System
 alias update='sudo pacman -Syu'

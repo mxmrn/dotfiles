@@ -96,8 +96,9 @@ fi
 # Welcome message (only for interactive shells)
 # =====================================================
 
-# Run neofetch only for interactive, non-SSH sessions
-if [[ -o interactive ]] && [[ -z "${SSH_CONNECTION}" ]] && command -v fastfetch >/dev/null 2>&1; then
+# Run fastfetch only in top-level interactive shells (not SSH, nvim or Claude Code)
+if [[ -o interactive ]] && [[ -z "${SSH_CONNECTION}" ]] && [[ "${SHLVL}" -le 1 ]] \
+    && [[ -z "${NVIM}" ]] && [[ -z "${CLAUDECODE}" ]] && command -v fastfetch >/dev/null 2>&1; then
     fastfetch
 fi
 
