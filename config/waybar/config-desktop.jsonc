@@ -4,6 +4,7 @@
 	"modules-left": [
 		"hyprland/workspaces",
 		"custom/crypto",
+		"custom/claude",
 	],
 	"modules-center": [
 		"clock#time",

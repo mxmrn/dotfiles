@@ -85,6 +85,15 @@
         "format": "󰌌 {short}"
     },
 
+    "custom/claude": {
+        "exec": "~/dotfiles/scripts/claude-waybar.sh",
+        "return-type": "json",
+        "interval": 2,
+        "hide-empty-text": true,
+        "tooltip": true,
+        "on-click": "~/dotfiles/scripts/claude-focus.sh"
+    },
+
     "custom/crypto": {
         "format": "{}",
         "interval": 600,
