@@ -5,7 +5,7 @@
 # =====================================================
 #
 # Note: Wayland environment variables are set in:
-# ~/dotfiles/config/hypr/conf/environment.conf
+# ~/dotfiles/config/hypr/hyprland.lua
 #
 
 # Base directories
@@ -15,7 +15,6 @@ export DOTFILES_SCRIPTS="${DOTFILES_DIR}/scripts"
 
 # Hyprland
 export HYPR_DIR="${DOTFILES_CONFIG}/hypr"
-export HYPR_CONF="${HYPR_DIR}/conf"
 export HYPR_SCRIPTS="${HYPR_DIR}/scripts"
 
 # Application configs

@@ -31,3 +31,8 @@ config/hypr/hyprpaper.conf
 # Project-specific files - never commit
 CLAUDE.md
 install.log
+
+# Hyprland lua: device-specific config and cloned lua plugins
+config/hypr/local.lua
+config/hypr/plugins/
+config/hypr/hyprland.lua.autogen

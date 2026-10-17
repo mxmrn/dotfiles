@@ -1,0 +1,24 @@
+-- -----------------------------------------------------
+-- Device-specific configuration (copy to local.lua, gitignored)
+-- -----------------------------------------------------
+
+local mainMod = "SUPER"
+
+-- Crypto API key for waybar-crypto
+-- hl.env("COINMARKETCAP_API_KEY", "your-key-here")
+
+-- Monitors
+-- hl.monitor({ output = "DP-1", mode = "2560x1440@170", position = "0x0", scale = 1 })
+
+-- Overwrite sensitivity
+-- hl.config({ input = { sensitivity = -0.75 } })
+
+-- split-monitor-workspaces (desktop with several monitors).
+-- Loading it here disables the default workspace binds in hyprland.lua.
+-- local smw = require("plugins.split-monitor-workspaces")
+-- smw.setup({ workspace_count = 6, monitor_priority = { "DP-1", "DP-2" } })
+-- for i = 1, smw.get_amount_of_workspaces() do
+--     local n = tostring(i)
+--     hl.bind(mainMod .. " + " .. n,         smw.workspace(n))
+--     hl.bind(mainMod .. " + SHIFT + " .. n, smw.move_to_workspace_silent(n))
+-- end

@@ -332,21 +332,21 @@ create_symlinks() {
 setup_local_config() {
     print_header "Setting up device-specific configuration"
 
-    local local_conf="${CONFIG_DIR}/hypr/conf/local.conf"
-    local example_conf="${CONFIG_DIR}/hypr/conf/local.conf.example"
+    local local_conf="${CONFIG_DIR}/hypr/local.lua"
+    local example_conf="${CONFIG_DIR}/hypr/local.lua.example"
 
     if [[ ! -f "${local_conf}" ]]; then
         if [[ -f "${example_conf}" ]]; then
-            mv "${example_conf}" "${local_conf}"
-            print_success "Created local.conf from example"
-            print_warning "Edit ~/.config/hypr/conf/local.conf to customize:"
+            cp "${example_conf}" "${local_conf}"
+            print_success "Created local.lua from example"
+            print_warning "Edit ~/.config/hypr/local.lua to customize:"
             echo "  • Add COINMARKETCAP_API_KEY for waybar-crypto"
-            echo "  • Uncomment hyprsplit config for desktop setup"
+            echo "  • Uncomment split-monitor-workspaces config for desktop setup"
         else
-            print_warning "local.conf.example not found, skipping"
+            print_warning "local.lua.example not found, skipping"
         fi
     else
-        print_success "local.conf already exists"
+        print_success "local.lua already exists"
     fi
 }
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Simple commands are in: ~/dotfiles/config/hypr/conf/autostart.conf
+# Simple commands are in: ~/dotfiles/config/hypr/hyprland.lua (hl.on("hyprland.start"))
 # This script handles only conditional/complex logic
 #
 
