@@ -16,8 +16,7 @@ case "${wallpaper_engine}" in
     "awww")
         if command_exists awww; then
             print_info "Starting awww daemon..."
-            awww init
-            awww-daemon --format xrgb &
+            pgrep -x awww-daemon >/dev/null || awww-daemon --format xrgb &
             sleep 0.5
         else
             print_error "awww not found, falling back to hyprpaper"

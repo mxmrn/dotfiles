@@ -13,14 +13,12 @@ rasi_file="$HOME/.cache/current_wallpaper.rasi"
 blur="$BLUR"
 
 # Create cache file if not exists
-if [ ! -f $cache_file ] ;then
-    touch $cache_file
+if [ ! -f "$cache_file" ] ;then
     echo "$HOME/wallpaper/default.jpg" > "$cache_file"
 fi
 
 # Create rasi file if not exists
-if [ ! -f $rasi_file ] ;then
-    touch $rasi_file
+if [ ! -f "$rasi_file" ] ;then
     echo "* { current-image: url(\"$HOME/wallpaper/default.jpg\", height); }" > "$rasi_file"
 fi
 
@@ -31,7 +29,7 @@ case $1 in
     # Load wallpaper from .cache of last session
     "init")
         sleep 1
-        if [ -f $cache_file ]; then
+        if [ -f "$current_wallpaper" ]; then
             wallpaper=$current_wallpaper
         else
             wallpaper=$(find ~/wallpaper/ -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | shuf -n 1)
@@ -55,7 +53,7 @@ case $1 in
     # Change color scheme only (keep current wallpaper)
     "scheme")
         sleep 0.2
-        if [ ! -f $cache_file ]; then
+        if [ ! -f "$current_wallpaper" ]; then
             echo "No current wallpaper found"
             exit 1
         fi
@@ -94,12 +92,12 @@ fi
 # ----------------------------------------------------- 
 # get wallpaper image name
 # ----------------------------------------------------- 
-newwall=$(echo $wallpaper | sed "s|$HOME/wallpaper/||g")
+newwall="${wallpaper#"$HOME"/wallpaper/}"
 
 # ----------------------------------------------------- 
 # Reload waybar with new colors
 # -----------------------------------------------------
-~/dotfiles/config/waybar/launch.sh
+systemctl --user restart waybar
 
 # -----------------------------------------------------
 # Set the new wallpaper
@@ -113,11 +111,11 @@ if [ "$WALLPAPER_ENGINE" == "awww" ] ;then
     echo ":: Using awww with transition: $transition_type"
     # Get all connected monitors
     monitors=$(hyprctl monitors -j | jq -r '.[].name' | tr '\n' ',' | sed 's/,$//')
-    awww img $wallpaper \
+    awww img "$wallpaper" \
         --outputs "$monitors" \
         --transition-bezier .43,1.19,1,.4 \
         --transition-fps=60 \
-        --transition-type=$transition_type \
+        --transition-type="$transition_type" \
         --transition-duration=0.7 \
         --transition-pos "$( hyprctl cursorpos )"
 elif [ "$WALLPAPER_ENGINE" == "hyprpaper" ] ;then
