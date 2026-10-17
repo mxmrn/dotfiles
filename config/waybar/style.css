@@ -46,6 +46,7 @@
 #wireplumber,
 #cpu,
 #memory,
+#custom-gpu,
 #language,
 #clock,
 #battery,
@@ -66,6 +67,7 @@
 #wireplumber,
 #cpu,
 #memory,
+#custom-gpu,
 #language {
   margin: 0px;
   border-radius: 0px;
@@ -174,9 +176,18 @@
 #custom-crypto,
 #cpu,
 #memory,
+#custom-gpu,
 #language,
 #clock,
 #battery,
 #backlight {
   color: @secondary;
+}
+
+#custom-gpu.high {
+  color: @tertiary;
+}
+
+#custom-gpu.critical {
+  color: @error;
 }

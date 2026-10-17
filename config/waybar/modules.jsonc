@@ -81,6 +81,14 @@
         "on-click": "kitty -e btop"
     },
 
+    "custom/gpu": {
+        "exec": "~/dotfiles/scripts/gpu-waybar.sh",
+        "return-type": "json",
+        "interval": 2,
+        "hide-empty-text": true,
+        "on-click": "kitty -e btop"
+    },
+
     "hyprland/language": {
         "format": "󰌌 {short}"
     },

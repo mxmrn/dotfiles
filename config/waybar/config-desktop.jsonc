@@ -15,6 +15,7 @@
 		"wireplumber",
 		"cpu",
 		"memory",
+		"custom/gpu",
 		"hyprland/language",
 		"tray",
 		"custom/power",
