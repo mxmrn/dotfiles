@@ -37,7 +37,7 @@ alias gl='git log --oneline --graph'
 
 # Hyprland
 alias hypr-reload='hyprctl reload'
-alias hypr-restart='killall waybar && ${HOME}/dotfiles/waybar/launch.sh &'
+alias hypr-restart='systemctl --user restart waybar swaync'
 
 # Docker-compose
 alias dcup='docker-compose up -d --build'

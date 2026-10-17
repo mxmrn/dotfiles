@@ -1,33 +1,13 @@
 {
-	"layer":"top",
-	"position":"top",
-	"reload_style_on_change":true,
-		
-	"height":20,
-  "margin-top": 5,
+	"layer": "top",
+	"position": "top",
+	"reload_style_on_change": true,
+
+	"height": 20,
+	"margin-top": 5,
 	"margin-left": 5,
-	"margin-right":5,
-	
-	"modules-left":[
-    "hyprland/workspaces",
-    "custom/crypto",
-  ],
-"modules-center": [
-    "battery",
-		"clock#time",
-    "backlight",
-],
-	"modules-right":[
-		"custom/notification",
-		"network",
-		"wireplumber",
-    "cpu",
-    "memory",
-    "hyprland/language",
-    "tray",
-		"custom/power"
-		],
-		
+	"margin-right": 5,
+
 		"hyprland/workspaces": {
 		    "all-outputs": true,
 		    "format": "{icon}",
@@ -51,7 +31,7 @@
 	
 	"wireplumber": {
 		    "on-click": "pavucontrol",
-		    "on-click-right": "amixer sset Master toggle 1>/dev/null",
+		    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
 		    "format": "{icon}  {volume}%",
 		    "format-muted": "  Muted",
 		    "format-icons": {
@@ -118,8 +98,6 @@
         "spacing": 10
     },
     "battery": {
-      "bat": "BATT",
-      "adapter": "ACAD",
       "interval": 30,
       "format": "{capacity}% ",
       "format-charging": "{capacity}% ",
@@ -129,7 +107,6 @@
       "tooltip-format": "Remaining: {time}"
     },
     "backlight": {
-      "device": "amdgpu_bl1",
       "format": "󰃟 {percent}%",
         "on-scroll-up":"brightnessctl set +1%",
         "on-scroll-down":"brightnessctl set 1%-"

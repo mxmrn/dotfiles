@@ -326,6 +326,15 @@ create_symlinks() {
         fi
     done
 
+    # systemd user unit drop-ins (waybar)
+    local unit_dir="${CONFIG_DIR}/systemd/user"
+    mkdir -p "${unit_dir}"
+    for dropin in "${DOTFILES_DIR}"/config/systemd/user/*.d; do
+        [[ -d "${dropin}" ]] || continue
+        ln -sfn "${dropin}" "${unit_dir}/$(basename "${dropin}")"
+        print_success "Linked $(basename "${dropin}")"
+    done
+
     print_success "All symlinks created"
 }
 
@@ -832,12 +841,10 @@ main() {
     if command_exists hyprctl && [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
         hyprctl reload && print_success "Hyprland config reloaded"
 
-        # Launch waybar if not running
-        if ! pgrep -x waybar > /dev/null; then
-            "${DOTFILES_DIR}/config/waybar/launch.sh" &
-            disown
-            print_success "Waybar launched"
-        fi
+        # Waybar and swaync run as systemd user units
+        systemctl --user daemon-reload
+        systemctl --user enable --now waybar.service swaync.service \
+            && print_success "Waybar and swaync enabled"
     fi
 
     # Done

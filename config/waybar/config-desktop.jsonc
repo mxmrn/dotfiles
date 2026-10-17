@@ -1,0 +1,21 @@
+{
+	"include": ["~/dotfiles/config/waybar/modules.jsonc"],
+
+	"modules-left": [
+		"hyprland/workspaces",
+		"custom/crypto",
+	],
+	"modules-center": [
+		"clock#time",
+	],
+	"modules-right": [
+		"custom/notification",
+		"network",
+		"wireplumber",
+		"cpu",
+		"memory",
+		"hyprland/language",
+		"tray",
+		"custom/power",
+	],
+}
