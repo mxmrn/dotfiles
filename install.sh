@@ -736,6 +736,10 @@ setup_icons() {
     papirus-folders -C black --theme Papirus-Dark \
         && print_success "Papirus-Dark folder color set to black" \
         || print_warning "papirus-folders failed"
+
+    bash "${DOTFILES_DIR}/scripts/setup-cursor.sh" \
+        && print_success "Static cursor theme created" \
+        || print_warning "Failed to create static cursor theme"
 }
 
 generate_gtk_bookmarks() {
